@@ -6,27 +6,27 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using AISV1.Data;
-using AISV1.Models;
+using AISV2.Models;
 
 namespace AISV2.Controllers
 {
-    public class FilesController : Controller
+    public class MeetingsController : Controller
     {
         private readonly AISContext _context;
 
-        public FilesController(AISContext context)
+        public MeetingsController(AISContext context)
         {
             _context = context;
         }
 
-        // GET: Files
+        // GET: Meetings
         public async Task<IActionResult> Index()
         {
-            var aISContext = _context.Files.Include(f => f.EventType);
+            var aISContext = _context.Meetings.Include(m => m.File);
             return View(await aISContext.ToListAsync());
         }
 
-        // GET: Files/Details/5
+        // GET: Meetings/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -34,48 +34,42 @@ namespace AISV2.Controllers
                 return NotFound();
             }
 
-            var file = await _context.Files
-                .Include(f => f.EventType)
-                .Include(f => f.FileRemarks)
-                .Include(f => f.Meetings)
-                .Include(f => f.FileCustomers)
-                    .ThenInclude(c => c.Customer)
-                .Include(f => f.FileContactPerson)
-                    .ThenInclude(c => c.ContactPerson)
-                .FirstOrDefaultAsync(m => m.FileId == id);
-            if (file == null)
+            var meeting = await _context.Meetings
+                .Include(m => m.File)
+                .FirstOrDefaultAsync(m => m.MeetingID == id);
+            if (meeting == null)
             {
                 return NotFound();
             }
 
-            return View(file);
+            return View(meeting);
         }
 
-        // GET: Files/Create
+        // GET: Meetings/Create
         public IActionResult Create()
         {
-            ViewData["EventTypeId"] = new SelectList(_context.EventType, "EventTypeID", "EventTypeID");
+            ViewData["FileID"] = new SelectList(_context.Files, "FileId", "FileId");
             return View();
         }
 
-        // POST: Files/Create
+        // POST: Meetings/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("FileId,EventTypeId,Name,EventDate,StartTime,EndTime,ArrivalOfOrganisers,AmountOfPeople,AmountOfPeopleReception,AmountOfPeopleDiningEst,AmountOfPeopleDesertEst")] File file)
+        public async Task<IActionResult> Create([Bind("MeetingID,FileID,Name,Location,MeetingDate,CreationTime")] Meeting meeting)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(file);
+                _context.Add(meeting);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["EventTypeId"] = new SelectList(_context.EventType, "EventTypeID", "EventTypeID", file.EventTypeId);
-            return View(file);
+            ViewData["FileID"] = new SelectList(_context.Files, "FileId", "FileId", meeting.FileID);
+            return View(meeting);
         }
 
-        // GET: Files/Edit/5
+        // GET: Meetings/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -83,23 +77,23 @@ namespace AISV2.Controllers
                 return NotFound();
             }
 
-            var file = await _context.Files.FindAsync(id);
-            if (file == null)
+            var meeting = await _context.Meetings.FindAsync(id);
+            if (meeting == null)
             {
                 return NotFound();
             }
-            ViewData["EventTypeId"] = new SelectList(_context.EventType, "EventTypeID", "EventTypeID", file.EventTypeId);
-            return View(file);
+            ViewData["FileID"] = new SelectList(_context.Files, "FileId", "FileId", meeting.FileID);
+            return View(meeting);
         }
 
-        // POST: Files/Edit/5
+        // POST: Meetings/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("FileId,EventTypeId,Name,EventDate,StartTime,EndTime,ArrivalOfOrganisers,AmountOfPeople,AmountOfPeopleReception,AmountOfPeopleDiningEst,AmountOfPeopleDesertEst")] File file)
+        public async Task<IActionResult> Edit(int id, [Bind("MeetingID,FileID,Name,Location,MeetingDate,CreationTime")] Meeting meeting)
         {
-            if (id != file.FileId)
+            if (id != meeting.MeetingID)
             {
                 return NotFound();
             }
@@ -108,12 +102,12 @@ namespace AISV2.Controllers
             {
                 try
                 {
-                    _context.Update(file);
+                    _context.Update(meeting);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!FileExists(file.FileId))
+                    if (!MeetingExists(meeting.MeetingID))
                     {
                         return NotFound();
                     }
@@ -124,11 +118,11 @@ namespace AISV2.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["EventTypeId"] = new SelectList(_context.EventType, "EventTypeID", "EventTypeID", file.EventTypeId);
-            return View(file);
+            ViewData["FileID"] = new SelectList(_context.Files, "FileId", "FileId", meeting.FileID);
+            return View(meeting);
         }
 
-        // GET: Files/Delete/5
+        // GET: Meetings/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -136,31 +130,31 @@ namespace AISV2.Controllers
                 return NotFound();
             }
 
-            var file = await _context.Files
-                .Include(f => f.EventType)
-                .FirstOrDefaultAsync(m => m.FileId == id);
-            if (file == null)
+            var meeting = await _context.Meetings
+                .Include(m => m.File)
+                .FirstOrDefaultAsync(m => m.MeetingID == id);
+            if (meeting == null)
             {
                 return NotFound();
             }
 
-            return View(file);
+            return View(meeting);
         }
 
-        // POST: Files/Delete/5
+        // POST: Meetings/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var file = await _context.Files.FindAsync(id);
-            _context.Files.Remove(file);
+            var meeting = await _context.Meetings.FindAsync(id);
+            _context.Meetings.Remove(meeting);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool FileExists(int id)
+        private bool MeetingExists(int id)
         {
-            return _context.Files.Any(e => e.FileId == id);
+            return _context.Meetings.Any(e => e.MeetingID == id);
         }
     }
 }

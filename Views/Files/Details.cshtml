@@ -8,67 +8,81 @@
 
 <div>
     <dl class="row">
-        <dt class="col-sm-6">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Name)
         </dt>
-        <dt class="col-sm-6">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Name)
-        </dt>
-        <dt class="col-sm-6">
-            @Html.DisplayNameFor(model => model.EventType.Description)
-        </dt>
-        <dd class="col-sm-6">
-            @Html.DisplayFor(model => model.EventType.Description)
         </dd>
-        <dd class="col-sm-6">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.EventDate)
-            </dt>
-        <dd class="col-sm-6">
+        </dt>
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.EventDate)
         </dd>
-        <dd class="col-sm-6">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.StartTime)
-            </dt>
-        <dd class="col-sm-6">
+        </dt>
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.StartTime)
         </dd>
-        <dt class="col-sm-6">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.EndTime)
         </dt>
-        <dd class="col-sm-6">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.EndTime)
         </dd>
-        <dt class="col-sm-6">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.ArrivalOfOrganisers)
         </dt>
-        <dd class="col-sm-6">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.ArrivalOfOrganisers)
         </dd>
-        <dt class="col-sm-6">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.AmountOfPeople)
         </dt>
-        <dd class="col-sm-6">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.AmountOfPeople)
         </dd>
-        <dt class="col-sm-6">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.AmountOfPeopleReception)
         </dt>
-        <dd class="col-sm-6">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.AmountOfPeopleReception)
         </dd>
-        <dt class="col-sm-6">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.AmountOfPeopleDiningEst)
         </dt>
-        <dd class="col-sm-6">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.AmountOfPeopleDiningEst)
         </dd>
-        <dt class="col-sm-6">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.AmountOfPeopleDesertEst)
         </dt>
-        <dd class="col-sm-6">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.AmountOfPeopleDesertEst)
         </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.EventType)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.EventType.EventTypeID)
+        </dd>
     </dl>
+
+    <div>
+        @Html.DisplayNameFor(model => model.Meetings)
+        <button class="btn btn-outline-danger">
+            <a asp-controller="Meetings" asp-action="Create" asp-route-id="@Model.FileId"> Add a Meeting</a>
+        </button>
+        @foreach (var item in Model.Meetings)
+        {
+
+            <row>
+               @Html.DisplayFor(modelItem => item.Name)  |  @Html.DisplayFor(modelItem => item.Location)
+            </row>
+        }
+    </div>
 </div>
 
 <div id="accordion">
@@ -78,7 +92,7 @@
                 @Html.DisplayNameFor(model => model.FileCustomers)
             </button>
             <button class="btn btn-outline-danger">
-                <a asp-controller="FileCustomers" asp-action="CreateFileID" asp-route-id="@Model.FileId">Test</a>
+                <a asp-controller="FileCustomers" asp-action="CreateFileID" asp-route-id="@Model.FileId">Add a customer</a>
             </button>       
         </div>
         <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
@@ -87,7 +101,7 @@
                 {
                     <row>
                         <div>
-                            @Html.DisplayFor(modelItem => item.Customer.Name)
+                            @Html.DisplayFor(modelItem => item.Customer.FullName) 
                         </div>
                     </row>
                 }
@@ -124,7 +138,7 @@
         <div class="card-header" id="headingThree">
             <h5 class="mb-0">
                 <button class="btn btn-link" data-toggle="collapse" data-target="#collapseThree" aria-expanded="true" aria-controls="collapseThree">
-                    Contact
+                    @Html.DisplayNameFor(model => model.FileContactPerson)
                 </button>
                 <button class="btn btn-outline-danger">
                     Voeg een contact toe
@@ -133,7 +147,14 @@
         </div>
         <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
             <div class="card-body">
-                Hier komt data
+                @foreach (var item in Model.FileContactPerson)
+                {
+                    <row>
+                        <div>
+                            @Html.DisplayFor(modelItem => item.ContactPerson.FullName)
+                        </div>
+                    </row>
+                }
             </div>
         </div>
     </div>

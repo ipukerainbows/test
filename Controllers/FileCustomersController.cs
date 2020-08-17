@@ -59,7 +59,7 @@ namespace AISV2.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("FileCustomerID,Name,FileID,CustomerID")] FileCustomer fileCustomer)
+        public async Task<IActionResult> Create([Bind("FileCustomerID,FileID,CustomerID")] FileCustomer fileCustomer)
         {
             if (ModelState.IsValid)
             {
@@ -72,10 +72,10 @@ namespace AISV2.Controllers
             return View(fileCustomer);
         }
 
-        // GET: FileCustomers/Create/1
+        // GET: FileCustomers/Create/1(FILEID)
         public IActionResult CreateFileID(int? id)
         {
-            ViewData["CustomerID"] = new SelectList(_context.Customers, "CustomerID", "Name");
+            ViewData["CustomerID"] = new SelectList(_context.Customers, "CustomerID", "FullName");
             ViewData["FileID"] = id.ToString();
             return View();
         }
@@ -103,7 +103,7 @@ namespace AISV2.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("FileCustomerID,Name,FileID,CustomerID")] FileCustomer fileCustomer)
+        public async Task<IActionResult> Edit(int id, [Bind("FileCustomerID,FileID,CustomerID")] FileCustomer fileCustomer)
         {
             if (id != fileCustomer.FileCustomerID)
             {

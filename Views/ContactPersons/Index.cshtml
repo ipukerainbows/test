@@ -1,4 +1,4 @@
-﻿@model IEnumerable<AISV1.Models.Customer>
+﻿@model IEnumerable<AISV2.Models.ContactPerson>
 
 @{
     ViewData["Title"] = "Index";
@@ -27,12 +27,6 @@
             <th>
                 @Html.DisplayNameFor(model => model.Email)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.BankAccountNumber)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.VatNumber)
-            </th>
             <th></th>
         </tr>
     </thead>
@@ -55,15 +49,9 @@
                 @Html.DisplayFor(modelItem => item.Email)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.BankAccountNumber)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.VatNumber)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.CustomerID">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.CustomerID">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.CustomerID">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.ContactPersonID">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.ContactPersonID">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.ContactPersonID">Delete</a>
             </td>
         </tr>
 }

@@ -54,7 +54,7 @@ namespace AISV2.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CustomerID,Name")] Customer customer)
+        public async Task<IActionResult> Create([Bind("CustomerID,FirstName,LastName,Telephone,CompanyName,Email,BankAccountNumber,VatNumber")] Customer customer)
         {
             if (ModelState.IsValid)
             {
@@ -86,7 +86,7 @@ namespace AISV2.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("CustomerID,Name")] Customer customer)
+        public async Task<IActionResult> Edit(int id, [Bind("CustomerID,FirstName,LastName,Telephone,CompanyName,Email,BankAccountNumber,VatNumber")] Customer customer)
         {
             if (id != customer.CustomerID)
             {

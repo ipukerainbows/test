@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AISV2.Models;
+using System;
 using System.Collections.Generic;
 
 namespace AISV1.Models
@@ -19,7 +20,9 @@ namespace AISV1.Models
 
         public ICollection<FileCustomer> FileCustomers { get; set; }
         public ICollection<FileRemark> FileRemarks { get; set; }
-        public EventType EventType { get; set; }
+        public ICollection<FileContactPerson> FileContactPerson { get; set; }
+        public ICollection<Meeting> Meetings { get; set; }
 
+        public EventType EventType { get; set; }
     }
 }

@@ -1,21 +1,22 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace AISV1.Models
+namespace AISV2.Models
 {
-    public class Customer
+    public class ContactPerson
     {
-        public int CustomerID { get; set; }
+        public int ContactPersonID { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Telephone { get; set; }
         public string CompanyName { get; set; }
         public string Email { get; set; }
-        public string BankAccountNumber { get; set; }
-        public string VatNumber { get; set; }
-        [NotMapped] 
+        [NotMapped]
         public string FullName { get { return this.FirstName + " " + this.LastName; } }
 
-        public ICollection<FileCustomer> FileCustomers { get; set; }
+        public ICollection<FileContactPerson> FileContactPerson { get; set; }
     }
 }

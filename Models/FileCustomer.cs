@@ -5,7 +5,6 @@ namespace AISV1.Models
     public class FileCustomer
     {
         public int FileCustomerID { get; set; }
-        public string Name { get; set; }
         public int FileID { get; set; }
         public int CustomerID { get; set; }
 

@@ -1,4 +1,4 @@
-﻿@model IEnumerable<AISV1.Models.FileCustomer>
+﻿@model IEnumerable<AISV2.Models.FileContactPerson>
 
 @{
     ViewData["Title"] = "Index";
@@ -13,7 +13,7 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Customer)
+                @Html.DisplayNameFor(model => model.ContactPerson)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.File)
@@ -25,15 +25,15 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Customer.CustomerID)
+                @Html.DisplayFor(modelItem => item.ContactPerson.ContactPersonID)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.File.FileId)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.FileCustomerID">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.FileCustomerID">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.FileCustomerID">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.FileContactPersonID">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.FileContactPersonID">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.FileContactPersonID">Delete</a>
             </td>
         </tr>
 }

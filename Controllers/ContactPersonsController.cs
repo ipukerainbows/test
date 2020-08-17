@@ -6,27 +6,26 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using AISV1.Data;
-using AISV1.Models;
+using AISV2.Models;
 
 namespace AISV2.Controllers
 {
-    public class FilesController : Controller
+    public class ContactPersonsController : Controller
     {
         private readonly AISContext _context;
 
-        public FilesController(AISContext context)
+        public ContactPersonsController(AISContext context)
         {
             _context = context;
         }
 
-        // GET: Files
+        // GET: ContactPersons
         public async Task<IActionResult> Index()
         {
-            var aISContext = _context.Files.Include(f => f.EventType);
-            return View(await aISContext.ToListAsync());
+            return View(await _context.ContactPersons.ToListAsync());
         }
 
-        // GET: Files/Details/5
+        // GET: ContactPersons/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -34,48 +33,39 @@ namespace AISV2.Controllers
                 return NotFound();
             }
 
-            var file = await _context.Files
-                .Include(f => f.EventType)
-                .Include(f => f.FileRemarks)
-                .Include(f => f.Meetings)
-                .Include(f => f.FileCustomers)
-                    .ThenInclude(c => c.Customer)
-                .Include(f => f.FileContactPerson)
-                    .ThenInclude(c => c.ContactPerson)
-                .FirstOrDefaultAsync(m => m.FileId == id);
-            if (file == null)
+            var contactPerson = await _context.ContactPersons
+                .FirstOrDefaultAsync(m => m.ContactPersonID == id);
+            if (contactPerson == null)
             {
                 return NotFound();
             }
 
-            return View(file);
+            return View(contactPerson);
         }
 
-        // GET: Files/Create
+        // GET: ContactPersons/Create
         public IActionResult Create()
         {
-            ViewData["EventTypeId"] = new SelectList(_context.EventType, "EventTypeID", "EventTypeID");
             return View();
         }
 
-        // POST: Files/Create
+        // POST: ContactPersons/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("FileId,EventTypeId,Name,EventDate,StartTime,EndTime,ArrivalOfOrganisers,AmountOfPeople,AmountOfPeopleReception,AmountOfPeopleDiningEst,AmountOfPeopleDesertEst")] File file)
+        public async Task<IActionResult> Create([Bind("ContactPersonID,FirstName,LastName,Telephone,CompanyName,Email")] ContactPerson contactPerson)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(file);
+                _context.Add(contactPerson);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["EventTypeId"] = new SelectList(_context.EventType, "EventTypeID", "EventTypeID", file.EventTypeId);
-            return View(file);
+            return View(contactPerson);
         }
 
-        // GET: Files/Edit/5
+        // GET: ContactPersons/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -83,23 +73,22 @@ namespace AISV2.Controllers
                 return NotFound();
             }
 
-            var file = await _context.Files.FindAsync(id);
-            if (file == null)
+            var contactPerson = await _context.ContactPersons.FindAsync(id);
+            if (contactPerson == null)
             {
                 return NotFound();
             }
-            ViewData["EventTypeId"] = new SelectList(_context.EventType, "EventTypeID", "EventTypeID", file.EventTypeId);
-            return View(file);
+            return View(contactPerson);
         }
 
-        // POST: Files/Edit/5
+        // POST: ContactPersons/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("FileId,EventTypeId,Name,EventDate,StartTime,EndTime,ArrivalOfOrganisers,AmountOfPeople,AmountOfPeopleReception,AmountOfPeopleDiningEst,AmountOfPeopleDesertEst")] File file)
+        public async Task<IActionResult> Edit(int id, [Bind("ContactPersonID,FirstName,LastName,Telephone,CompanyName,Email")] ContactPerson contactPerson)
         {
-            if (id != file.FileId)
+            if (id != contactPerson.ContactPersonID)
             {
                 return NotFound();
             }
@@ -108,12 +97,12 @@ namespace AISV2.Controllers
             {
                 try
                 {
-                    _context.Update(file);
+                    _context.Update(contactPerson);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!FileExists(file.FileId))
+                    if (!ContactPersonExists(contactPerson.ContactPersonID))
                     {
                         return NotFound();
                     }
@@ -124,11 +113,10 @@ namespace AISV2.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["EventTypeId"] = new SelectList(_context.EventType, "EventTypeID", "EventTypeID", file.EventTypeId);
-            return View(file);
+            return View(contactPerson);
         }
 
-        // GET: Files/Delete/5
+        // GET: ContactPersons/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -136,31 +124,30 @@ namespace AISV2.Controllers
                 return NotFound();
             }
 
-            var file = await _context.Files
-                .Include(f => f.EventType)
-                .FirstOrDefaultAsync(m => m.FileId == id);
-            if (file == null)
+            var contactPerson = await _context.ContactPersons
+                .FirstOrDefaultAsync(m => m.ContactPersonID == id);
+            if (contactPerson == null)
             {
                 return NotFound();
             }
 
-            return View(file);
+            return View(contactPerson);
         }
 
-        // POST: Files/Delete/5
+        // POST: ContactPersons/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var file = await _context.Files.FindAsync(id);
-            _context.Files.Remove(file);
+            var contactPerson = await _context.ContactPersons.FindAsync(id);
+            _context.ContactPersons.Remove(contactPerson);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool FileExists(int id)
+        private bool ContactPersonExists(int id)
         {
-            return _context.Files.Any(e => e.FileId == id);
+            return _context.ContactPersons.Any(e => e.ContactPersonID == id);
         }
     }
 }
